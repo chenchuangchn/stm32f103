@@ -85,7 +85,7 @@ void gpio_config(int gpionum, unsigned char mode, unsigned char config)
 
 	if(0 == mode) {
 		gpio_offset->ODR &= ~(1 << pinnum);
-		gpio_offset->ODR |= ((config & 0xf0) >> 4);
+		gpio_offset->ODR |= ((config & 0xf0) >> 4) << pinnum;
 	}
 
 	/*if(0 == mode) {
@@ -127,24 +127,33 @@ void led_set(int gpionum, int on)
 	set_gpio_value(gpionum, on);
 }
 
-void key_init(void)
+void key_scan_init(void)
+{
+	rcc_apb2_enable(IOPCEN | IOPAEN);
+	gpio_config(KEY0, INPUT_MODE, PULLUP_INPUT);
+	gpio_config(KEY1, INPUT_MODE, PULLUP_INPUT);
+}
+
+void key_interrupt_init(void)
 {
 	rcc_apb2_enable(IOPCEN | IOPAEN);
 	gpio_config(KEY0, INPUT_MODE, FLOAT_INPUT);
 	gpio_config(KEY1, INPUT_MODE, FLOAT_INPUT);
 }
 
+
 int main(void)
 {
 	unsigned char sw = 0;
 	led_init();
-	key_init();
+	key_scan_init();
+	//key_interrupt_init();
 
-	//led_set(LED0, OFF);
-	//led_set(LED1, ON);
+	
 	//while(1);
+	//#if 0
 	while(1) {
-		if(0 == get_gpio_value(KEY1)) {
+		if(0 == get_gpio_value(KEY0)) {
 			led_set(LED0, OFF);
 			led_set(LED1, ON);
 		}
@@ -153,6 +162,7 @@ int main(void)
 			led_set(LED1, OFF);
 		}
 	}
+	//#endif
 	//while(1);
 	return 0;
 }

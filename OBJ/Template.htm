@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\Template.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\Template.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060183: Last Updated: Fri Jan 06 10:06:41 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060183: Last Updated: Fri Jan 06 21:25:44 2017
 <BR><P>
 <H3>Maximum Stack Usage =         28 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -523,15 +523,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[64]"></a>gpio_config</STRONG> (Thumb, 132 bytes, Stack size 20 bytes, main.o(i.gpio_config))
+<P><STRONG><a name="[64]"></a>gpio_config</STRONG> (Thumb, 134 bytes, Stack size 20 bytes, main.o(i.gpio_config))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = gpio_config
 </UL>
 <BR>[Called By]<UL><LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;led_init
-<LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;key_init
+<LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;key_scan_init
 </UL>
 
-<P><STRONG><a name="[62]"></a>key_init</STRONG> (Thumb, 30 bytes, Stack size 4 bytes, main.o(i.key_init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = key_init &rArr; gpio_config
+<P><STRONG><a name="[62]"></a>key_scan_init</STRONG> (Thumb, 30 bytes, Stack size 4 bytes, main.o(i.key_scan_init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = key_scan_init &rArr; gpio_config
 </UL>
 <BR>[Calls]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rcc_apb2_enable
 <LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_config
@@ -561,7 +561,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;led_set
 <LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;led_init
-<LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;key_init
+<LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;key_scan_init
 <LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_gpio_value
 </UL>
 <BR>[Called By]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
@@ -569,7 +569,7 @@ Global Symbols
 
 <P><STRONG><a name="[63]"></a>rcc_apb2_enable</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, main.o(i.rcc_apb2_enable))
 <BR><BR>[Called By]<UL><LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;led_init
-<LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;key_init
+<LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;key_scan_init
 </UL>
 
 <P><STRONG><a name="[67]"></a>set_gpio_value</STRONG> (Thumb, 60 bytes, Stack size 16 bytes, main.o(i.set_gpio_value))
