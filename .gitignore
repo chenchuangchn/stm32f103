@@ -44,5 +44,5 @@ install_manifest.txt
 CTestTestfile.cmake
 tags
 
-./OBJ/
+*./OBJ/
 

@@ -27,14 +27,21 @@ Project File Date:  12/26/2016
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 2 (build 183)', folder: 'D:\Software\Installed\Keil_V5\ARM\ARMCC\Bin'
 Build target 'Tmeplate'
-"..\OBJ\Template.axf" - 0 Error(s), 0 Warning(s).
+compiling system_stm32f10x.c...
+system_stm32f10x.c(486): warning:  #177-D: function "SetSysClock" was declared but never referenced
+  static void SetSysClock(void)
+system_stm32f10x.c: 1 warning, 0 errors
+linking...
+Program Size: Code=1180 RO-data=336 RW-data=8 ZI-data=1832  
+FromELF: creating hex file...
+"..\OBJ\Template.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
   E:\Share\git_soruce\stm32\USER\RTE
   D:\Software\Installed\Keil_V5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>
