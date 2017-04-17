@@ -1,5 +1,6 @@
 //#include "core_cm3.h"
 #include "stm32f10x.h"
+#include "sys.h"
 
 /*GPIO Number*/
 #define PA(x)	x
@@ -55,6 +56,8 @@
 
 #define LED0	PA(8)
 #define LED1	PD(2)
+//#define LED0 PAout(8)	// PA8
+//#define LED1 PDout(2)	// PD2	
 
 #define KEY0 	PC(5)
 #define KEY1	PA(15)
@@ -148,7 +151,7 @@ void afio_extint_config(unsigned int gpionum, unsigned int open, unsigned int ed
 	EXTI->FTSR |= ((edge >> 1) & 0x01) << pinnum;
 }
 
-
+#if 0
 void nvic_init(unsigned char intnum, unsigned char prigroup, 
 		unsigned char preempt_priority, unsigned char sub_priority)
 {
@@ -170,12 +173,13 @@ void nvic_config(unsigned char intnum, unsigned char enable)
 		//NVIC->ICER[intnum / 32] |= 1 << (intnum % 32);
 	}
 }
+#endif
 
 /********************************************************************/
 void led_init(void)
 {
 	rcc_apb2_enable(IOPDEN);
-	//gpio_config(LED0, UP50MHZ_MODE, PUSHPULL_OUTPUT);
+	gpio_config(LED0, UP50MHZ_MODE, PUSHPULL_OUTPUT);
 	gpio_config(LED1, UP50MHZ_MODE, PUSHPULL_OUTPUT);
 }
 
@@ -198,68 +202,156 @@ void key_interrupt_init(void)
 	afio_extint_config(KEY0, 1, FALLING_EDGE);
 }
 
+#if 1
 void EXTI9_5_IRQHandler(void)
 {
-	if(0 == get_gpio_value(KEY0)) {
-		led_set(LED0, ON);
-		led_set(LED1, OFF);
-	}
-	else {
-		led_set(LED0, ON);
-		led_set(LED1, OFF);
-	}
+	static unsigned char onoff = ON;
+	led_set(LED1, onoff);
+	onoff = !onoff;
+	EXTI->PR = 1 << 5;
 }
-
-void MYRCC_DeInit(void)
-{	
- 	RCC->APB1RSTR = 0x00000000;//复位结束			 
-	RCC->APB2RSTR = 0x00000000; 
-	  
-  	RCC->AHBENR = 0x00000014;  //睡眠模式闪存和SRAM时钟使能.其他关闭.	  
-  	RCC->APB2ENR = 0x00000000; //外设时钟关闭.			   
-  	RCC->APB1ENR = 0x00000000;   
-	RCC->CR |= 0x00000001;     //使能内部高速时钟HSION	 															 
-	RCC->CFGR &= 0xF8FF0000;   //复位SW[1:0],HPRE[3:0],PPRE1[2:0],PPRE2[2:0],ADCPRE[1:0],MCO[2:0]					 
-	RCC->CR &= 0xFEF6FFFF;     //复位HSEON,CSSON,PLLON
-	RCC->CR &= 0xFFFBFFFF;     //复位HSEBYP	   	  
-	RCC->CFGR &= 0xFF80FFFF;   //复位PLLSRC, PLLXTPRE, PLLMUL[3:0] and USBPRE 
-	RCC->CIR = 0x00000000;     //关闭所有中断		 
-	//配置向量表				  
-#ifdef  VECT_TAB_RAM
-	//MY_NVIC_SetVectorTable(0x20000000, 0x0);
-#else   
-	//MY_NVIC_SetVectorTable(0x08000000,0x0);
+#else
+void EXTI9_5_IRQHandler(void)
+{			
+	//delay_ms(10);   //消抖			 
+	//if(KEY0==0)	{
+		PAout(8)=!PAout(8);
+	//}
+ 	 EXTI_ClearITPendingBit(EXTI_Line5);    //清除LINE5上的中断标志位  
+}
 #endif
-}
 
-void Stm32_Clock_Init(u8 PLL)
-{
-	unsigned char temp=0;   
-	MYRCC_DeInit();		  //复位并配置向量表
- 	RCC->CR|=0x00010000;  //外部高速时钟使能HSEON
-	while(!(RCC->CR>>17));//等待外部时钟就绪
-	RCC->CFGR=0X00000400; //APB1=DIV2;APB2=DIV1;AHB=DIV1;
-	PLL-=2;//抵消2个单位
-	RCC->CFGR|=PLL<<18;   //设置PLL值 2~16
-	RCC->CFGR|=1<<16;	  //PLLSRC ON 
-	FLASH->ACR|=0x32;	  //FLASH 2个延时周期
-
-	RCC->CR|=0x01000000;  //PLLON
-	while(!(RCC->CR>>25));//等待PLL锁定
-	RCC->CFGR|=0x00000002;//PLL作为系统时钟	 
-	while(temp!=0x02)     //等待PLL作为系统时钟设置成功
-	{   
-		temp=RCC->CFGR>>2;
-		temp&=0x03;
-	}    
-}	
 
 void mco_init(void)
-{
+{
 	RCC->CFGR |= (7 << 24);
 	rcc_apb2_enable(IOPAEN);
 	gpio_config(PA(8), UP50MHZ_MODE, AF_PUSHPULL_OUTPUT);
 	rcc_apb2_enable(AFIOEN);
+}
+
+//按键初始化函数 
+//PA0.15和PC5 设置成输入
+void KEY_Init(void)
+{
+	
+	GPIO_InitTypeDef GPIO_InitStructure;
+
+ 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_GPIOC,ENABLE);//使能PORTA,PORTC时钟
+
+	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);//关闭jtag，使能SWD，可以用SWD模式调试
+	
+	GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_15;//PA15
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; //设置成上拉输入
+ 	GPIO_Init(GPIOA, &GPIO_InitStructure);//初始化GPIOA15
+	
+	GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_5;//PC5
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; //设置成上拉输入
+ 	GPIO_Init(GPIOC, &GPIO_InitStructure);//初始化GPIOC5
+ 
+	GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_0;//PA0
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD; //PA0设置成输入，默认下拉	  
+	GPIO_Init(GPIOA, &GPIO_InitStructure);//初始化GPIOA.0
+	
+} 
+
+
+//外部中断初始化函数
+void EXTIX_Init(void)
+{
+ 
+ 	  EXTI_InitTypeDef EXTI_InitStructure;
+ 	  NVIC_InitTypeDef NVIC_InitStructure;
+
+  	//RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);//外部中断，需要使能AFIO时钟
+	rcc_apb2_enable(AFIOEN);
+	//KEY_Init();//初始化按键对应io模式
+	key_scan_init();
+
+    //GPIOC.5 中断线以及中断初始化配置
+  	//GPIO_EXTILineConfig(GPIO_PortSourceGPIOC,GPIO_PinSource5);
+  	AFIO->EXTICR[1] |= 2 << 4;
+#if 0
+  	EXTI_InitStructure.EXTI_Line=EXTI_Line5;
+  	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;	
+  	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;//下降沿触发
+  	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+  	EXTI_Init(&EXTI_InitStructure);	 	//根据EXTI_InitStruct中指定的参数初始化外设EXTI寄存器
+#endif
+	/*Enable EXTI*/
+	EXTI->IMR |= 1 << 5;
+	/*Set falling trigger edge*/
+	EXTI->FTSR |= 1 << 5;
+#if 0	
+	NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;			//使能按键所在的外部中断通道
+  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02;	//抢占优先级2， 
+  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;					//子优先级1
+  	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//使能外部中断通道
+  	NVIC_Init(&NVIC_InitStructure); 
+#endif
+	/*Set interrupt priority*/
+	NVIC->IP[23] = 0x20;
+
+	/*Enable interrput*/
+	NVIC->ISER[0] |= 1 << 23;
+
+}
+
+#if 1
+void interrupt_init(void)
+{
+	/*Set priority group*/
+	SCB->AIRCR = 0x05fa0500;
+	/*Set interrupt priority*/
+	NVIC->IP[23] = 0x20;
+	/*Enable AFIO*/
+	rcc_apb2_enable(AFIOEN);
+	/*Config PC5 to EXTI5*/
+	AFIO->EXTICR[1] |= 2 << 4;
+	/*Set falling trigger edge*/
+	EXTI->FTSR |= 1 << 5;
+	/*Enable EXTI*/
+	EXTI->IMR |= 1 << 5;
+	/*Enable interrput*/
+	NVIC->ISER[0] |= 1 << 23;
+}
+#else
+
+void interrupt_init(void)
+{
+	/*Set priority group*/
+	SCB->AIRCR = 0x05fa0500;
+	EXTIX_Init();
+}
+#endif
+
+void TIM3_IRQHandler(void)
+{
+	static unsigned char onoff = ON;
+	if(TIM3->SR & 1) {
+		led_set(LED1, onoff);
+		onoff = !onoff;
+		TIM3->SR &= ~1;
+	}
+}
+
+void timer_init(void)
+{
+	/*Set timer3 interrupt priority*/
+	NVIC->IP[29] = 0x40;
+	RCC->APB1ENR |= 1 << 1;
+	/*set AREP*/
+	TIM3->CR1 |= 1 << 7;
+	/*Set psc*/
+	TIM3->PSC = 7199;
+	/*set arr*/
+	TIM3->ARR = 4999;
+	/*enable irq*/
+	TIM3->DIER = 1;
+	/*enable cnt*/
+	TIM3->CR1 = 1;
+	/*Enable interrput*/
+	NVIC->ISER[0] |= 1 << 29;
 }
 
 int main(void)
@@ -268,17 +360,20 @@ int main(void)
 	//clock_reset();
 	//clock_init_to_72M();
 	//unsigned char extinum = (KEY0 % 16);
-	//Stm32_Clock_Init(9);
 	led_init();
-	mco_init();
+	//mco_init();
 	//nvic_init(extinum, 4, 3, 0);
+	//key_scan_init();
 	key_scan_init();
+	interrupt_init();
+	timer_init();
+	//key_scan_init();
 	//key_interrupt_init();
 	//nvic_config(extinum, 1);
-	//led_set(LED0, OFF);
+	led_set(LED0, ON);
 	led_set(LED1, OFF);
-	//while(1);
-	//#if 0
+	while(1);
+	#if 0
 	while(1) {
 		if(0 == get_gpio_value(KEY0)) {
 			led_set(LED0, OFF);
@@ -289,7 +384,7 @@ int main(void)
 			led_set(LED1, OFF);
 		}
 	}
-	//#endif
+	#endif
 	//while(1);
 	return 0;
 }

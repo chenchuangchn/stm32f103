@@ -27,14 +27,18 @@ Project File Date:  12/26/2016
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 2 (build 183)', folder: 'D:\Software\Installed\Keil_V5\ARM\ARMCC\Bin'
 Build target 'Tmeplate'
-compiling system_stm32f10x.c...
-system_stm32f10x.c(486): warning:  #177-D: function "SetSysClock" was declared but never referenced
-  static void SetSysClock(void)
-system_stm32f10x.c: 1 warning, 0 errors
+compiling main.c...
+main.c(263): warning:  #177-D: variable "EXTI_InitStructure" was declared but never referenced
+   	  EXTI_InitTypeDef EXTI_InitStructure;
+main.c(264): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+   	  NVIC_InitTypeDef NVIC_InitStructure;
+main.c(389): warning:  #111-D: statement is unreachable
+  	return 0;
+main.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=1180 RO-data=336 RW-data=8 ZI-data=1832  
+Program Size: Code=1484 RO-data=336 RW-data=12 ZI-data=1836  
 FromELF: creating hex file...
-"..\OBJ\Template.axf" - 0 Error(s), 1 Warning(s).
+"..\OBJ\Template.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
   E:\Share\git_soruce\stm32\USER\RTE

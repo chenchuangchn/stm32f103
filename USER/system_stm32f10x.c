@@ -209,7 +209,7 @@ static void SetSysClock(void);
   * @param  None
   * @retval None
   */
-#if 0
+#if 1
 void SystemInit (void)
 {
   /* Reset the RCC clock configuration to the default reset state(for debug purpose) */
@@ -268,48 +268,19 @@ void SystemInit (void)
   SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH. */
 #endif 
 }
-#endif
-#if 0
-void SystemInit (void)
-{
-  /* Reset the RCC clock configuration to the default reset state(for debug purpose) */
-  /* Set HSION bit */
-  RCC->CR |= (uint32_t)0x00000001;
-
-  /* Reset SW, HPRE, PPRE1, PPRE2, ADCPRE and MCO bits */
-  RCC->CFGR &= (uint32_t)0xF0FF0000;
-  
-  /* Reset HSEON, CSSON and PLLON bits */
-  RCC->CR &= (uint32_t)0xFEF6FFFF;
-
-  /* Reset HSEBYP bit */
-  RCC->CR &= (uint32_t)0xFFFBFFFF;
-
-  /* Reset PLLSRC, PLLXTPRE, PLLMUL and USBPRE/OTGFSPRE bits */
-  RCC->CFGR &= (uint32_t)0xFF80FFFF;
-
-
-  /* Disable all interrupts and clear pending bits  */
- // RCC->CIR = 0x009F0000;
-  
-  /* Configure the System clock frequency, HCLK, PCLK2 and PCLK1 prescalers */
-  /* Configure the Flash Latency cycles and enable prefetch buffer */
-  SetSysClock();
-
-}
-#endif
-//#if 0
+#else
 /*code by cc*/
 void SystemInit (void)
 {
+	SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH. */
+
 	/*HSI enable*/
 	RCC->CR |= 0x01;
 	while(!(RCC->CR & (1 << 1)));
-
 	RCC->AHBENR = 0x14;
 
 	/* Enable Prefetch Buffer */
-    FLASH->ACR |= FLASH_ACR_PRFTBE;
+    //FLASH->ACR |= FLASH_ACR_PRFTBE;
 
     /* Flash 2 wait state */
     FLASH->ACR &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
@@ -317,7 +288,7 @@ void SystemInit (void)
 
 	
 	/*CSSON enable*/
-	RCC->CR |= (1 << 19);			
+	//RCC->CR |= (1 << 19);			
 
 	/*HSE enalbe*/
 	RCC->CR |= (1 << 16);
@@ -332,8 +303,13 @@ void SystemInit (void)
 
 	RCC->CFGR |= 2;
 
+	#ifdef VECT_TAB_SRAM
+  //SCB->VTOR = SRAM_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM. */
+#else
+  //SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH. */
+#endif
 }
-//#endif
+#endif
 
 /**
   * @brief  Update SystemCoreClock variable according to Clock Register Values.

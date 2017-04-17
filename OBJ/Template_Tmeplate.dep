@@ -1,5 +1,5 @@
 Dependencies for Project 'Template', Target 'Tmeplate': (DO NOT MODIFY !)
-F (.\main.c)(0x5886073B)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart-I E:\Share\git_soruce\stm32\USER\RTE-I D:\Software\Installed\Keil_V5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include-I D:\Software\Installed\Keil_V5\ARM\CMSIS\Include-D__UVISION_VERSION="520" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
+F (.\main.c)(0x58F4C745)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart-I E:\Share\git_soruce\stm32\USER\RTE-I D:\Software\Installed\Keil_V5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include-I D:\Software\Installed\Keil_V5\ARM\CMSIS\Include-D__UVISION_VERSION="520" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
 I (stm32f10x.h)(0x4D783CB4)
 I (..\CORE\core_cm3.h)(0x4D523B58)
 I (D:\Software\Installed\Keil_V5\ARM\ARMCC\include\stdint.h)(0x56FE42DE)
@@ -29,6 +29,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
+I (..\SYSTEM\sys\sys.h)(0x5055B57C)
 F (.\stm32f10x_it.c)(0x4D99A59E)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart-I E:\Share\git_soruce\stm32\USER\RTE-I D:\Software\Installed\Keil_V5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include-I D:\Software\Installed\Keil_V5\ARM\CMSIS\Include-D__UVISION_VERSION="520" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_it.o --omf_browse ..\obj\stm32f10x_it.crf --depend ..\obj\stm32f10x_it.d)
 I (stm32f10x_it.h)(0x4D99A59E)
 I (stm32f10x.h)(0x4D783CB4)
@@ -60,7 +61,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
-F (.\system_stm32f10x.c)(0x5886B93B)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart-I E:\Share\git_soruce\stm32\USER\RTE-I D:\Software\Installed\Keil_V5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include-I D:\Software\Installed\Keil_V5\ARM\CMSIS\Include-D__UVISION_VERSION="520" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\system_stm32f10x.o --omf_browse ..\obj\system_stm32f10x.crf --depend ..\obj\system_stm32f10x.d)
+F (.\system_stm32f10x.c)(0x58F0C22A)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\USER -I ..\CORE -I ..\STM32F10x_FWLib\inc -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart-I E:\Share\git_soruce\stm32\USER\RTE-I D:\Software\Installed\Keil_V5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include-I D:\Software\Installed\Keil_V5\ARM\CMSIS\Include-D__UVISION_VERSION="520" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\system_stm32f10x.o --omf_browse ..\obj\system_stm32f10x.crf --depend ..\obj\system_stm32f10x.d)
 I (stm32f10x.h)(0x4D783CB4)
 I (..\CORE\core_cm3.h)(0x4D523B58)
 I (D:\Software\Installed\Keil_V5\ARM\ARMCC\include\stdint.h)(0x56FE42DE)
